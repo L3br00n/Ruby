@@ -413,14 +413,38 @@ a {
         <option value="trendingDay">Trending Day</option>
       </select>
     </div>
+<button onclick='
+    const newTab = window.open("about:blank", "_blank");
 
-    <!-- Owner's Favorites Section -->
-    <details id="ownersFavoritesWrapper" open style="margin-bottom:10px">
-      <summary id="ownersFavoritesCount" style="cursor:pointer;font-size:16px;font-weight:bold;">Owner's Favorites (0)</summary>
-      <div id="ownersFavorites" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"></div>
-    </details>
+    fetch("https://raw.githubusercontent.com/L3br00n/Game-List/refs/heads/main/index.html?t=" + Date.now())
+      .then(r => r.text())
+      .then(html => {
+        newTab.document.open();
+        newTab.document.write(html);
+        newTab.document.close();
+      })
+      .catch(err => {
+        newTab.document.write("<h1>Failed to load file</h1><pre>" + err + "</pre>");
+      });
+' style="padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:#0a0a0a;color:#fff;font-size:13px">
+      Ethans Games
+</button>
+<button onclick='
+    const newTab = window.open("about:blank", "_blank");
 
-    <!-- All Games Section -->
+    fetch("https://raw.githubusercontent.com/genizy/ugs-singlefile/refs/heads/main/AASINGLEFILE.html?t=" + Date.now())
+      .then(r => r.text())
+      .then(html => {
+        newTab.document.open();
+        newTab.document.write(html);
+        newTab.document.close();
+      })
+      .catch(err => {
+        newTab.document.write("<h1>Failed to load file</h1><pre>" + err + "</pre>");
+      });
+' style="padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:#0a0a0a;color:#fff;font-size:13px">
+      Ultimate Game Stash
+</button>
     <h2 id="allCount">All Games (0)</h2>
     <div id="container" style="display:flex;flex-wrap:wrap;gap:10px"></div>
   </div>
@@ -535,7 +559,7 @@ function displayZones(z) {
     const b = document.createElement('button');
     b.textContent = file.name;
     b.onclick = e => { e.stopPropagation(); openGnMathZone(file); };
-    b.style = "margin-top: 5px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;";
+    b.style = "margin-top: 5px; padding: 10px; background-color: #000000; color: white; border: none; cursor: pointer;";
     i.appendChild(b);
 
     container.appendChild(i);
@@ -563,7 +587,7 @@ function displayEthanGames(g) {
     const b = document.createElement('button');
     b.textContent = file.title;
     b.onclick = e => { e.stopPropagation(); openEthanGame(file); };
-    b.style = "margin-top: 5px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;";
+    b.style = "margin-top: 5px; padding: 10px; background-color: #000000; color: white; border: none; cursor: pointer;";
     i.appendChild(b);
 
     container.appendChild(i);
