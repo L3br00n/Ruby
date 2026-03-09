@@ -783,7 +783,37 @@ document.getElementById("accentPicker").addEventListener("input",e=>setAccent(e.
 const API_KEY="d9b52b38"
 async function searchMovie(){const q=document.getElementById("searchBox").value.trim();if(!q)return;const res=await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(q)}`);const data=await res.json();const r=document.getElementById("results");r.innerHTML="";if(!data.Search){r.innerHTML="No results";return}data.Search.forEach(m=>{const p=m.Poster!=="N/A"?m.Poster:"";const d=document.createElement("div");d.className="movie";d.innerHTML=`<img class="poster" src="${p}"><div><strong>${m.Title}</strong> (${m.Year})<br>IMDb ID: ${m.imdbID} <button onclick="copyID('${m.imdbID}')">Copy</button> <button onclick="watchMovie('${m.imdbID}')">Watch</button></div>`;r.appendChild(d)})}
 function copyID(id){navigator.clipboard.writeText(id);alert("Copied "+id)}
-function watchMovie(id){let url=`https://vidlink.pro/movie/${id}?autoplay=true`;let t=window.open("about:blank","_blank");t.document.write(`<html><body style="margin:0;background:black"><iframe src="${url}" allowfullscreen style="border:none;width:100vw;height:100vh"></iframe></body></html>`);t.document.close()}
+function watchMovie(id){let url=`https://vidlink.pro/movie/${id}?autoplay=true`;let t=window.open("about:blank","_blank");
+t.document.write(`
+  <html>
+    <title>Blooket - Fun, Free, Educational Games for Everyone</title>
+    <link id="favicon" rel="icon" href="https://www.blooket.com/favicon.ico?cache_buster=${new Date().getTime()}" />
+    <body style="margin:0;background:black">
+      <iframe 
+        src="${url}" 
+        allowfullscreen 
+        style="border:none;width:100vw;height:100vh">
+      </iframe>
+    </body>
+  </html>
+`);
+t.document.close();
+function updateFavicon() {
+  var favicon = t.document.getElementById('favicon');
+  if (favicon) {
+    // Change the favicon by updating its href with a new timestamp to force refresh
+    favicon.href = `https://www.blooket.com/favicon.ico?cache_buster=${new Date().getTime()}`;
+  }
+}
+var updates = 0;
+var interval = setInterval(function() {
+  updateFavicon();
+  updates++;
+  if (updates >= 10) {
+    clearInterval(interval); // Stop updating after 10 times
+  }
+}, 1000);
+}
 let shortcuts={movies:"1",imdb:"2",games:"4",settings:"3"}
 function saveShortcuts(){shortcuts.movies=document.getElementById("shortcutMovies").value;shortcuts.imdb=document.getElementById("shortcutIMDb").value;shortcuts.games=document.getElementById("shortcutGames").value;shortcuts.settings=document.getElementById("shortcutSettings").value;localStorage.setItem("shortcuts",JSON.stringify(shortcuts))}
 let savedS=JSON.parse(localStorage.getItem("shortcuts"));if(savedS){shortcuts=savedS;document.getElementById("shortcutMovies").value=shortcuts.movies;document.getElementById("shortcutIMDb").value=shortcuts.imdb;document.getElementById("shortcutGames").value=shortcuts.games;document.getElementById("shortcutSettings").value=shortcuts.settings}
