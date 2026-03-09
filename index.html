@@ -308,7 +308,7 @@ a {
   <div class="tab" onclick="switchTab('imdb',this)"><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png">‎ ‎My Movies</div>
   <div class="tab" onclick="switchTab('games',this)"><img src="https://img.icons8.com/ios_filled/512/FFFFFF/google-play.png">Games</div>
   <div class="tab" onclick="switchTab('settings',this)"><img src="https://img.icons8.com/m_rounded/200/FFFFFF/settings.png">Settings</div>
-  <div class="tab" onclick="switchTab('cloaking',this)"><img src="https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png">Cloaking</div> <!-- New Cloaking Tab -->
+  <div class="tab" onclick="switchTab('cloaking',this)"><img src="https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png">Cloaking</div>
 </div>
 
 <div id="movies" class="tabPage active">
@@ -593,6 +593,7 @@ async function openGnMathZone(file) {
   const wnd = window.open('about:blank', '_blank');
   if (!wnd) return alert('Allow popups to play!');
   wnd.document.write('Loading...');
+  
   try {
     let url = file.url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
     let res = await fetch(url + "?t=" + Date.now());
@@ -703,7 +704,43 @@ sortOptions.addEventListener('change', sortZones);
 function switchTab(id,el){document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));el.classList.add("active");document.querySelectorAll(".tabPage").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active")}
 let tips={"https://novashow.vip":"Just dont use novavip server","https://kaitovault.com":"Nice UI minimal ads","https://cinema.bz":"Good site AD FREE","https://getroned.online":"Great NO ADS"}
 function updatePreview(){let url=document.getElementById("siteSelect").value;document.getElementById("previewIcon").src="https://www.google.com/s2/favicons?domain="+(new URL(url)).hostname+"&sz=128"}
-function openSite(){let url=document.getElementById("siteSelect").value;let t=window.open("about:blank","_blank");t.document.write(`<html><body style="margin:0"><iframe src="${url}" style="border:none;width:100vw;height:100vh"></iframe></body></html>`);t.document.close()}
+function openSite(){let url=document.getElementById("siteSelect").value;let t=window.open("about:blank","_blank");
+t.document.write(`
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Blooket - Fun, Free, Educational Games for Everyone</title>
+      <!-- Set an initial favicon to Blooket's favicon -->
+      <link id="favicon" rel="icon" href="https://www.blooket.com/favicon.ico?cache_buster=${new Date().getTime()}" />
+    </head>
+    <body style="margin:0">
+      <!-- Embed the iframe with the URL provided -->
+      <iframe src="${url}" style="border:none;width:100vw;height:100vh"></iframe>
+    </body>
+  </html>
+`);
+
+// Close the document to finish loading the page content
+t.document.close();
+
+// Function to update the favicon
+function updateFavicon() {
+  var favicon = t.document.getElementById('favicon');
+  if (favicon) {
+    // Change the favicon by updating its href with a new timestamp to force refresh
+    favicon.href = `https://www.blooket.com/favicon.ico?cache_buster=${new Date().getTime()}`;
+  }
+}
+
+var updates = 0;
+var interval = setInterval(function() {
+  updateFavicon();
+  updates++;
+  if (updates >= 10) {
+    clearInterval(interval); // Stop updating after 10 times
+  }
+}, 1000);
+}
 updatePreview()
 let quotes=JSON.parse(localStorage.getItem("quotes"))||["Default quote"]
 const quoteBox=document.getElementById("quoteBox")
