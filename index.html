@@ -349,8 +349,8 @@ a {
       </div>
       <div class="previewBox">
         <!-- Google's favicon -->
-        <img id="cloakingPreviewIcon" src="https://upload.wikimedia.org/wikipedia/commons/5/59/Google_Classroom_Logo.png" alt="Classroom">
-        <span id="cloakingPreviewTitle">Home - Classroom</span> <!-- Display the name "Google" -->
+        <img id="cloakingPreviewIcon" src="https://www.google.com/s2/favicons?domain=khanacademy.org&sz=32" alt="Classroom">
+        <span id="cloakingPreviewTitle">Khan Academy</span> <!-- Display the name "Google" -->
       </div>
     </div>
   </div>
@@ -360,9 +360,9 @@ a {
   // Function to activate cloaking (change title and favicon to Google)
   function activateCloaking() {
     // Set the title of the page to Google
-    document.title = "Home - Classroom";
+    document.title = "Khan Academy";
     // Change the favicon to Google's
-    const faviconURL = "https://upload.wikimedia.org/wikipedia/commons/5/59/Google_Classroom_Logo.png";
+    const faviconURL = "https://www.google.com/s2/favicons?domain=khanacademy.org&sz=32";
     let link = document.querySelector("link[rel='icon']");
 
     // If no favicon link exists, create it
