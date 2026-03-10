@@ -3,6 +3,7 @@
 <head>
 <meta charset=UTF-8>
 <title>Ruby</title>
+<link rel="icon" id="favicon" href="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png">
 <style>body::before{content:"";position:fixed;top:0;left:0;width:100%;height:200%;background-image:radial-gradient(rgba(110,203,255,.15) 1px,transparent 1px);background-size:30px 30px;animation:scrollDots 60s linear infinite;pointer-events:none;z-index:-1}@keyframes scrollDots{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}:root{--bg:#000;--accent:#6ecbff;--accent-glow:rgba(110, 203, 255, .35);--text-primary:#fff;--text-dim:#94a3b8;--border:rgba(110, 203, 255, .08);--card-bg:rgba(255, 255, 255, .03);--font:'Courier New',monospace}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--text-primary);font-family:var(--font);overflow-x:hidden}.tabBar{display:flex;flex-wrap:nowrap;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);padding:10px 12px 0;backdrop-filter:blur(8px)}.tab{padding:10px 15px;margin-right:8px;border-radius:10px 10px 0 0;cursor:pointer;font-size:13px;color:var(--text-dim);background:0 0;display:flex;align-items:center;gap:6px;transition:.2s}.tab img{width:16px;height:16px}.tab:hover{color:var(--accent)}.tab.active{color:#000;background:var(--accent);font-weight:700;box-shadow:0 0 15px var(--accent-glow)}.tabPage{display:none}.tabPage.active{display:block}.header{height:70px;display:flex;align-items:center;padding:0 30px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);backdrop-filter:blur(12px)}.logo{font-size:20px;color:var(--accent);text-shadow:0 0 10px var(--accent-glow);letter-spacing:2px}.container{display:flex;flex-direction:column;align-items:center;margin-top:120px}.card{background:var(--card-bg);width:720px;padding:40px;border-radius:16px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:30px;backdrop-filter:blur(12px)}.left{width:60%}input,select,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:#0a0a0a;color:#fff;font-family:var(--font)}select option{background:#0a0a0a;color:#fff}button{background:var(--accent);color:#000;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-family:var(--font);font-weight:700;transition:.2s;margin-top:.3rem}button:hover{transform:translateY(-1px);box-shadow:0 0 15px var(--accent-glow)}.previewBox{width:120px;height:120px;border-radius:16px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}.previewBox img{width:200px;height:64px}.quoteBox{margin-top:30px;font-size:14px;color:var(--text-dim);text-align:center;min-height:60px;opacity:1;transition:opacity .6s ease}.quoteBox.fade{opacity:0}.page{max-width:900px;margin:auto;background:var(--card-bg);padding:50px 60px;border-radius:16px;border:1px solid var(--border);margin-top:50px}.movie{padding:18px 0;border-bottom:1px solid var(--border);display:flex;gap:18px;align-items:center}.poster{width:70px;border-radius:6px}a{color:var(--accent);text-decoration:none}.settings{max-width:700px;margin:auto;margin-top:100px;display:flex;flex-direction:column;gap:25px}.settings h2{color:var(--accent)}.settingCard{background:var(--card-bg);border:1px solid var(--border);padding:25px;border-radius:12px}.quoteItem{display:flex;gap:10px;margin-bottom:10px}.quoteItem button{padding:6px 10px;font-size:12px}.colorPreset{width:32px;height:32px;border-radius:6px;cursor:pointer;border:1px solid var(--border);display:inline-block;margin-right:5px;vertical-align:middle}#container{display:flex;flex-wrap:wrap;gap:10px}.zone-item{flex-basis:19%;display:flex;flex-direction:column;align-items:center}.zone-item img{width:100%;height:auto;cursor:pointer}.zone-item button{margin-top:5px;padding:10px;background-color:#4caf50;color:#fff;border:none;cursor:pointer;width:100%}.zone-item button:hover{background-color:#45a049}</style>
 <style>.game{background:#1b1b1b;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;align-items:center;transition:.2s;width:100%;max-width:180px}.game:hover{transform:scale(1.05)}.game img{width:100%;height:120px;object-fit:cover}.game-title{padding:8px;font-size:14px;text-align:center;height:40px;overflow:hidden}.play-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;padding:8px;cursor:pointer;margin:8px;border-radius:8px;width:80%;transition:.3s}.play-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.05)}#ownersFavorites,#results{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:15px;justify-items:center}.game{display:flex;flex-direction:column;align-items:center}</style>
 </head>
@@ -51,7 +52,24 @@
 </div>
 </div>
 </div>
-<script>function activateCloaking(){document.title="IXL | Dashboard";const e="https://www.google.com/s2/favicons?domain=https://www.ixl.com/dashboard&sz=32";let t=document.querySelector("link[rel='icon']");t||(t=document.createElement("link"),t.rel="icon",document.head.appendChild(t)),t.href=e;let n=document.querySelector("link[rel='shortcut icon']");n||(n=document.createElement("link"),n.rel="shortcut icon",document.head.appendChild(n)),n.href=e,alert("cloaked")}</script>
+<script>function activateCloaking(){
+
+document.title = "IXL | Dashboard";
+
+let icon = document.querySelector("link[rel='icon']");
+
+if(!icon){
+    icon = document.createElement("link");
+    icon.rel = "icon";
+    document.head.appendChild(icon);
+}
+
+icon.href = "https://www.google.com/s2/favicons?domain=ixl.com&sz=64";
+
+alert("Cloaking Enabled");
+
+}
+</script>
 
 <div id="imdb" class="tabPage active">
 
