@@ -8,13 +8,13 @@
 </head>
 <body>
 <div class=tabBar>
-<div class="tab active" onclick='switchTab("movies",this)'><img src=https://cdn-icons-png.flaticon.com/512/3617/3617218.png>Movies + Shows</div>
-<div class=tab onclick='switchTab("imdb",this)'><img src=https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png>‎ ‎My Movies</div>
+<div class="tab active" onclick='switchTab("imdb",this)'><img src=https://img.icons8.com/m_sharp/200/FFFFFF/home.png>Home</div>
+<div class="tab" onclick='switchTab("movies",this)'><img src=https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png>‎ ‎ Movies + Shows</div>
 <div class=tab onclick='switchTab("games",this)'><img src=https://img.icons8.com/ios_filled/512/FFFFFF/google-play.png>Games</div>
 <div class=tab onclick='switchTab("settings",this)'><img src=https://img.icons8.com/m_rounded/200/FFFFFF/settings.png>Settings</div>
 <div class=tab onclick='switchTab("cloaking",this)'><img src=https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png>Cloaking</div>
 </div>
-<div id=movies class="tabPage active">
+<div id=movies class="tabPage">
 <div class=header><div class=logo>Movies + Shows</div></div>
 <div class=container>
 <div class=card>
@@ -31,7 +31,6 @@
 </div>
 <div class=previewBox><img id=previewIcon></div>
 </div>
-<div class=quoteBox id=quoteBox></div>
 </div>
 </div>
 <div id=cloaking class=tabPage>
@@ -46,21 +45,62 @@
 <button onclick=activateCloaking()>Enable Cloaking</button>
 </div>
 <div class=previewBox>
-<img id=cloakingPreviewIcon src="https://www.google.com/s2/favicons?domain=khanacademy.org&sz=32" alt=Classroom>
-<span id=cloakingPreviewTitle>Khan Academy</span>
+<img id=cloakingPreviewIcon src="https://www.google.com/s2/favicons?domain=https://www.ixl.com/dashboard&sz=32" alt=Classroom>
+<span id=cloakingPreviewTitle>IXL | Dashboard</span>
 </div>
 </div>
 </div>
 </div>
-<script>function activateCloaking(){document.title="Khan Academy";const e="https://www.google.com/s2/favicons?domain=khanacademy.org&sz=32";let t=document.querySelector("link[rel='icon']");t||(t=document.createElement("link"),t.rel="icon",document.head.appendChild(t)),t.href=e;let n=document.querySelector("link[rel='shortcut icon']");n||(n=document.createElement("link"),n.rel="shortcut icon",document.head.appendChild(n)),n.href=e,alert("cloaked")}</script>
-<div id=imdb class=tabPage>
-<div class=page>
-<h1>WARNING POPUPS</h1>
-<input id=searchBox placeholder="Search movie title..." onkeypress='"Enter"===event.key&&searchMovie()'>
-<button onclick=searchMovie()>Search</button>
-<div id=results></div>
+<script>function activateCloaking(){document.title="IXL | Dashboard";const e="https://www.google.com/s2/favicons?domain=https://www.ixl.com/dashboard&sz=32";let t=document.querySelector("link[rel='icon']");t||(t=document.createElement("link"),t.rel="icon",document.head.appendChild(t)),t.href=e;let n=document.querySelector("link[rel='shortcut icon']");n||(n=document.createElement("link"),n.rel="shortcut icon",document.head.appendChild(n)),n.href=e,alert("cloaked")}</script>
+
+<div id="imdb" class="tabPage active">
+
+<div class="page" style="text-align:center">
+
+<h1 style="font-size:56px;color:var(--accent);margin-bottom:10px;">
+Ruby
+</h1>
+
+<p style="color:var(--text-dim);margin-bottom:40px;font-size:18px;">
+A modular hub for movies, games, and tools.
+</p>
+
+<img src="https://images.vexels.com/media/users/3/224136/isolated/preview/3254497f70189b201e55780274dc1035-abstract-person-blue-logo.png"
+style="width:120px;margin-bottom:40px;filter:drop-shadow(0 0 10px var(--accent-glow));">
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:25px;margin-top:30px;">
+
+<div style="background:var(--card-bg);padding:25px;border-radius:12px;border:1px solid var(--border);">
+<img src="https://cdn-icons-png.flaticon.com/512/3617/3617218.png" style="width:50px;margin-bottom:10px;">
+<h3>Movies + Shows</h3>
+<p style="color:var(--text-dim);font-size:14px;">
+Stream movies and TV shows from curated sites.
+</p>
 </div>
+
+<div style="background:var(--card-bg);padding:25px;border-radius:12px;border:1px solid var(--border);">
+<img src="https://img.icons8.com/ios_filled/512/FFFFFF/google-play.png" style="width:50px;margin-bottom:10px;">
+<h3>Games</h3>
+<p style="color:var(--text-dim);font-size:14px;">
+Play PC games directly in your browser undetected.
+</p>
 </div>
+
+<div style="background:var(--card-bg);padding:25px;border-radius:12px;border:1px solid var(--border);">
+<img src="https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png" style="width:50px;margin-bottom:10px;">
+<h3>Cloaking</h3>
+<p style="color:var(--text-dim);font-size:14px;">
+Hide your activity using tab cloaking.
+</p>
+</div>
+
+</div>
+
+<div class=quoteBox id=quoteBox></div>
+
+</div>
+</div>  
+
 <div id=games class=tabPage>
 <div class=page>
 <h1>Mini Games</h1>
@@ -92,10 +132,10 @@
 </div>
 <div class=settingCard>
 <h2>Key Shortcuts</h2>
-<label>Alt+ → Movies: <input id=shortcutMovies value=1></label><br>
-<label>Alt+ → IMDb: <input id=shortcutIMDb value=2></label><br>
-<label>Alt+ → Games: <input id=shortcutGames value=4></label><br>
-<label>Alt+ → Settings: <input id=shortcutSettings value=3></label><br>
+<label>Alt+ → Home: <input id=shortcutIMDb value=h></label><br>
+<label>Alt+ → Movies: <input id=shortcutMovies value=m></label><br>
+<label>Alt+ → Games: <input id=shortcutGames value=g></label><br>
+<label>Alt+ → Settings: <input id=shortcutSettings value=s></label><br>
 <button onclick=saveShortcuts()>Save Shortcuts</button>
 </div>
 </div>
