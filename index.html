@@ -10,29 +10,144 @@
 <body>
 <div class=tabBar>
 <div class="tab active" onclick='switchTab("imdb",this)'><img src=https://img.icons8.com/m_sharp/200/FFFFFF/home.png>Home</div>
-<div class="tab" onclick='switchTab("movies",this)'><img src=https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/youtube-app-white-icon.png>‎ ‎ Movies + Shows</div>
+<div class="tab" onclick='switchTab("movies",this)'><img src=https://img.icons8.com/m_rounded/512/FFFFFF/support.png>Tools</div>
 <div class=tab onclick='switchTab("games",this)'><img src=https://img.icons8.com/ios_filled/512/FFFFFF/google-play.png>Games</div>
 <div class=tab onclick='switchTab("settings",this)'><img src=https://img.icons8.com/m_rounded/200/FFFFFF/settings.png>Settings</div>
 <div class=tab onclick='switchTab("cloaking",this)'><img src=https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png>Cloaking</div>
 </div>
-<div id=movies class="tabPage">
-<div class=header><div class=logo>Movies + Shows</div></div>
-<div class=container>
-<div class=card>
-<div class=left>
-<select id=siteSelect onchange=updatePreview()>
-<option value=https://flixtor.mov>Flixitor (Great)</option>
-<option value=https://cinema.bz>Cinema BZ (Great)</option>
-<option value=https://kaitovault.com>Kaito Vault (Great)</option>
-<option value=https://novashow.vip>Nova Show (Mid)</option>
-<option value=https://getroned.online>Getroned (CAUTION ADVISED)</option>
-</select>
-<div id=tipText></div>
-<button onclick=openSite()>Open</button>
-</div>
-<div class=previewBox><img id=previewIcon></div>
-</div>
-</div>
+<div id="movies" class="tabPage">
+  <div class="page">
+    <h1>Movies + Shows</h1>
+    <input id="movieSearch" placeholder="Search sites..." style="margin-bottom:10px;">
+
+    <div style="display:flex;gap:10px;margin:10px 0;flex-wrap:wrap">
+      <button id="randomMovieBtn">Random</button>
+      <button id="shuffleMovieBtn">Shuffle</button>
+      <select id="genreFilter" style="padding:8px;border-radius:6px;">
+        <option value="all">All Genres</option>
+        <option value="Media">Media</option>
+        <option value="Launchers">Launchers</option>
+        <option value="Streaming">Streaming</option>
+      </select>
+    </div>
+
+    <h2>Owner Favorites</h2>
+    <div id="movieOwnersFavorites" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
+
+    <h2>All Sites (<span id="movieCount">0</span>)</h2>
+    <div id="movieResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px"></div>
+  </div>
+
+  <script>
+    (() => {
+      const movieResults = document.getElementById("movieResults");
+      const ownerFavs = document.getElementById("movieOwnersFavorites");
+      const searchInput = document.getElementById("movieSearch");
+      const movieCount = document.getElementById("movieCount");
+      const randomBtn = document.getElementById("randomMovieBtn");
+      const shuffleBtn = document.getElementById("shuffleMovieBtn");
+      const genreFilter = document.getElementById("genreFilter");
+
+      const ownerFavorites = [];
+
+      let sites = [
+        { title:"Google", mode:"embed", genre:"Media", url:"https://raw.githubusercontent.com/L3br00n/google/refs/heads/main/index.html", image:"https://www.google.com/s2/favicons?domain=google.com&sz=128" },
+        { title:"Kaito Vault", mode:"iframe", genre:"Streaming", url:"https://kaitovault.com", image:"https://www.google.com/s2/favicons?domain=kaitovault.com&sz=128" },
+        { title:"Ghost Link", mode:"embed", genre:"Launchers", url:"https://raw.githubusercontent.com/virtuan4-max/ghostlinkhub/refs/heads/main/ghostlinksinglefile.html", image:"https://www.google.com/s2/favicons?domain=https://college.uber.space&sz=128" },
+        { title:"GN_MATH", mode:"embed", genre:"Launchers", url:"https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html", image:"https://lh3.googleusercontent.com/jmtwn0fx0lrayGSZNJPriTkTYKCHe28qKVWHXkhuBGbGp-0qqnyChejfysufTVSjhJF1Tp5smoK6WfWpMHTnsXfYCv8=rw-w1400" },
+        { title:"GN_MATH", mode:"embed", genre:"Launchers", url:"https://raw.githubusercontent.com/L3br00n/upgrade/refs/heads/main/index.html", image:"https://upload.wikimedia.org/wikipedia/en/thumb/b/b6/Minecraft_2024_cover_art.png/250px-Minecraft_2024_cover_art.png" },
+{ title:"Hydra Network", mode:"iframe", genre:"Launchers", url:"https://birthdays.riaueventorganizer.com/", image:"https://www.google.com/s2/favicons?domain=https://kali.org&sz=128" },
+        { title:"Space", mode:"iframe", genre:"Launchers", url:"https://area.forwardersoft.com", image:"https://www.google.com/s2/favicons?domain=https://www.space.com&sz=128" },
+      ];
+
+      function openSite(site) {
+        const win = window.open("about:blank","_blank");
+        if(!win){ alert("Allow popups"); return; }
+
+        if(site.mode === "iframe") {
+          win.document.write(`
+            <html>
+            <head><title>${site.title}</title></head>
+            <body style="margin:0">
+              <iframe src="${site.url}" style="border:none;width:100vw;height:100vh;"></iframe>
+            </body>
+            </html>
+          `);
+        } else {
+          fetch(site.url)
+            .then(r => r.text())
+            .then(html => {
+              const now = new Date();
+              win.document.write(`
+                <html>
+                <head><title>${site.title}</title></head>
+                <body>
+                  ${html}
+                </body>
+                </html>
+              `);
+              win.document.close();
+            })
+            .catch(e => alert("Failed to load site: "+e));
+        }
+      }
+
+      randomBtn.onclick = () => {
+        const filtered = getFilteredSites();
+        const s = filtered[Math.floor(Math.random() * filtered.length)];
+        if(s) openSite(s);
+      };
+
+      shuffleBtn.onclick = () => {
+        sites.sort(() => Math.random() - 0.5);
+        render();
+      };
+
+      function getFilteredSites() {
+        const q = searchInput.value.toLowerCase();
+        const genre = genreFilter.value;
+        return sites.filter(s => 
+          s.title.toLowerCase().includes(q) && (genre === "all" || s.genre === genre)
+        );
+      }
+
+      function render() {
+        const list = getFilteredSites();
+        movieResults.innerHTML = "";
+        ownerFavs.innerHTML = "";
+        movieCount.textContent = list.length;
+
+        list.forEach(site => {
+          const card = document.createElement("div");
+          card.className = "game";
+
+          const img = document.createElement("img");
+          img.src = site.image;
+
+          const title = document.createElement("div");
+          title.className = "game-title";
+          title.textContent = `${site.title} (${site.genre})`;
+
+          const btn = document.createElement("button");
+          btn.className = "play-btn";
+          btn.textContent = site.mode === "iframe" ? "Open (iframe)" : "Open (embed)";
+          btn.onclick = () => openSite(site);
+
+          card.append(img, title, btn);
+
+          if(ownerFavorites.includes(site.title)){
+            ownerFavs.appendChild(card);
+          } else {
+            movieResults.appendChild(card);
+          }
+        });
+      }
+
+      searchInput.oninput = render;
+      genreFilter.onchange = render;
+      render();
+    })();
+  </script>
 </div>
 <div id=cloaking class=tabPage>
 <div class=header>
@@ -119,30 +234,224 @@ Hide your activity using tab cloaking.
 </div>
 </div>  
 
-<div id=games class=tabPage>
-<div class=page>
+<div id="games" class="tabPage">
+<div class="page">
+
 <h1>Mini Games</h1>
-<input id=gameSearch placeholder="Search games...">
+
+<input id="gameSearch" placeholder="Search games...">
+
+<div style="display:flex;gap:10px;margin:10px 0;flex-wrap:wrap">
+
+<select id="gameSort">
+<option value="all">All Games</option>
+<option value="gnmath">GnMath Only</option>
+<option value="ethan">Ethan Only</option>
+<option value="az">A-Z</option>
+<option value="za">Z-A</option>
+<option value="new">Newest</option>
+<option value="old">Earliest</option>
+</select>
+
+<button id="randomGameBtn">Random</button>
+<button id="shuffleBtn">Shuffle</button>
+<button id="toggleHiddenBtn">Hidden</button>
+<button id="lastPlayedBtn">Last Played</button>
+
+</div>
+
 <h2>Owner Featured Games</h2>
-<div id=gameOwnersFavorites style=display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px></div>
-<h2>All Games (<span id=gameCount>0</span>)</h2>
-<div id=gameResults style=display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px></div>
+<div id="gameOwnersFavorites" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
+
+<h2>All Games (<span id="gameCount">0</span>)</h2>
+<div id="gameResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px"></div>
+
 </div>
+
+<script>
+(async()=>{
+
+const gameResults = document.getElementById("gameResults");
+const ownerFavs = document.getElementById("gameOwnersFavorites");
+const searchInput = document.getElementById("gameSearch");
+const gameSort = document.getElementById("gameSort");
+const gameCount = document.getElementById("gameCount");
+
+const randomBtn = document.getElementById("randomGameBtn");
+const shuffleBtn = document.getElementById("shuffleBtn");
+const hiddenBtn = document.getElementById("toggleHiddenBtn");
+const lastPlayedBtn = document.getElementById("lastPlayedBtn");
+
+const ownerFavorites = ["John Wick","Bloons Td 5","Windows 11","War The Knights","GTA: Vice City"];
+const hiddenTitles = ["Bloons TD 5"];
+
+let showHidden = false;
+
+let allGames = [];
+let addedIndex = 0;
+
+function addGame(g){
+  g.index = addedIndex++;
+  allGames.push(g);
+}
+
+/* BASE GAMES */
+[
+{title:"John Wick", image:"https://img.itch.zone/aW1hZ2UvMjUwOTYxLzExOTk2NTIucG5n/original/NG43M%2B.png", link:"https://raw.githubusercontent.com/brickyosu/ugs-files-sorted/refs/heads/main/N/clnightclubshowdown.html"},
+{title:"GTA: Vice City", image:"https://upload.wikimedia.org/wikipedia/en/c/ce/Vice-city-cover.jpg", link:"https://raw.githubusercontent.com/ze-man/Gta-Vice-City/refs/heads/main/index.html"},
+{title:"Geometry Dash", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl62uQEq_2Kn0iUO1bxGry5IomKYX52dKhEQ&s", link:"https://raw.githubusercontent.com/Soteris24/genetrydash.github.io/refs/heads/main/nomenu/index.html"},
+{title:"Bloons Td 5", image:"https://assets1.ignimgs.com/2017/05/05/bloons-td-5-1494021512734.jpg", link:"https://raw.githubusercontent.com/Dwell888/BTD5html5/refs/heads/main/index.html"}
+].forEach(addGame);
+
+/* ETHAN GAMES */
+try{
+const r = await fetch("https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/games.json");
+const ethan = await r.json();
+ethan.forEach(g=>{
+addGame({
+title:g.title,
+image:g.image?.startsWith("http") ? g.image : `https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/${g.image}`,
+link:g.link,
+isEthan:true
+});
+});
+}catch(e){}
+
+/* GN MATH ZONES */
+try{
+const r = await fetch("https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json");
+const zones = await r.json();
+zones.forEach(z=>{
+addGame({
+title:z.name,
+image:z.cover.replace("{COVER_URL}","https://cdn.jsdelivr.net/gh/gn-math/covers@main"),
+link:z.url.replace("{HTML_URL}","https://cdn.jsdelivr.net/gh/gn-math/html@main"),
+isGn:true
+});
+});
+}catch(e){}
+
+/* REMOVE DUPLICATES */
+const map = new Map();
+allGames.forEach(g=>{
+const key = g.title.toLowerCase();
+if(!map.has(key)) map.set(key,g);
+});
+allGames = [...map.values()];
+
+/* LAST PLAYED STORAGE */
+function addLastPlayed(title){
+let list = JSON.parse(localStorage.getItem("lastPlayed")||"[]");
+list = list.filter(t=>t!==title);
+list.unshift(title);
+list = list.slice(0,10);
+localStorage.setItem("lastPlayed",JSON.stringify(list));
+}
+
+/* PLAY GAME */
+async function playGame(g){
+const win = window.open("about:blank","_blank");
+if(!win) return alert("Allow popups!");
+win.document.write("Loading...");
+try{
+const r = await fetch(g.link+"?t="+Date.now());
+const html = await r.text();
+win.document.open();
+win.document.write(html);
+win.document.close();
+addLastPlayed(g.title);
+}catch(err){
+win.document.write("<h1>Failed to load</h1>"+err);
+}
+}
+
+/* RANDOM */
+randomBtn.onclick=()=>{
+const g = allGames[Math.floor(Math.random()*allGames.length)];
+playGame(g);
+};
+
+/* SHUFFLE */
+shuffleBtn.onclick=()=>{
+allGames.sort(()=>Math.random()-0.5);
+render();
+};
+
+/* TOGGLE HIDDEN */
+hiddenBtn.onclick=()=>{
+showHidden=!showHidden;
+render();
+};
+
+/* LAST PLAYED VIEW */
+lastPlayedBtn.onclick=()=>{
+const list = JSON.parse(localStorage.getItem("lastPlayed")||"[]");
+const filtered = allGames.filter(g=>list.includes(g.title));
+render(filtered);
+};
+
+/* RENDER */
+function render(customList){
+
+let list = customList ? [...customList] : [...allGames];
+
+const q = searchInput.value.toLowerCase();
+list = list.filter(g=>g.title.toLowerCase().includes(q));
+
+const sort = gameSort.value;
+
+if(sort==="gnmath") list=list.filter(g=>g.isGn);
+if(sort==="ethan") list=list.filter(g=>g.isEthan);
+
+if(sort==="az") list.sort((a,b)=>a.title.localeCompare(b.title));
+if(sort==="za") list.sort((a,b)=>b.title.localeCompare(a.title));
+
+if(sort==="new") list.sort((a,b)=>b.index-a.index);
+if(sort==="old") list.sort((a,b)=>a.index-b.index);
+
+if(!showHidden){
+list = list.filter(g=>!hiddenTitles.includes(g.title));
+}
+
+gameResults.innerHTML="";
+ownerFavs.innerHTML="";
+gameCount.textContent=list.length;
+
+list.forEach(g=>{
+
+const card=document.createElement("div");
+card.className="game";
+
+const img=document.createElement("img");
+img.src=g.image||"https://via.placeholder.com/180x120";
+
+const title=document.createElement("div");
+title.className="game-title";
+title.textContent=g.title;
+
+const btn=document.createElement("button");
+btn.className="play-btn";
+btn.textContent="Play";
+btn.onclick=()=>playGame(g);
+
+card.append(img,title,btn);
+
+if(ownerFavorites.includes(g.title)) ownerFavs.appendChild(card);
+else gameResults.appendChild(card);
+
+});
+
+}
+
+searchInput.oninput=()=>render();
+gameSort.onchange=()=>render();
+
+render();
+
+})();
+</script>
+
 </div>
-<script>(async()=>{const t=document.getElementById("gameResults"),e=document.getElementById("gameOwnersFavorites"),n=document.getElementById("gameSearch"),a=document.getElementById("gameCount"),i=["John Wick","Bloons Td 5","Windows 11","War The Knights","GTA: Vice City"],s=["Bloons TD 5"];let o=[];try{const t=await fetch("https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/games.json");o=(await t.json()).map((t=>({title:t.title,image:t.image?t.image.startsWith("http")?t.image:`https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/${t.image}`:"https://via.placeholder.com/180x120?text=Game",link:t.link,isEthan:!0})))}catch(t){console.error("Failed to load Ethan games:",t)}let l=[];try{const t=["https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json","https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json"],e=await fetch(t[Math.floor(Math.random()*t.length)]);l=(await e.json()).map((t=>({title:t.name,image:t.cover.replace("{COVER_URL}","https://cdn.jsdelivr.net/gh/gn-math/covers@main").replace("{HTML_URL}","https://cdn.jsdelivr.net/gh/gn-math/html@main"),link:t.url.replace("{HTML_URL}","https://cdn.jsdelivr.net/gh/gn-math/html@main")})))}catch(t){console.error("Failed to load Gn-Math zones:",t)}
-const c=[{title:"John Wick",image:"https://img.itch.zone/aW1hZ2UvMjUwOTYxLzExOTk2NTIucG5n/original/NG43M%2B.png",
-          link:"https://raw.githubusercontent.com/brickyosu/ugs-files-sorted/refs/heads/main/N/clnightclubshowdown.html"},
-         {title:"Gn-Math",
-          image:"https://lh3.googleusercontent.com/jmtwn0fx0lrayGSZNJPriTkTYKCHe28qKVWHXkhuBGbGp-0qqnyChejfysufTVSjhJF1Tp5smoK6WfWpMHTnsXfYCv8=rw-w1400",
-          link:"https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html"},
-         {title:"GTA: Vice City",
-          image:"https://upload.wikimedia.org/wikipedia/en/c/ce/Vice-city-cover.jpg",link:"https://raw.githubusercontent.com/ze-man/Gta-Vice-City/refs/heads/main/index.html"},
-          {title:"Geometry Dash",
-          image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl62uQEq_2Kn0iUO1bxGry5IomKYX52dKhEQ&s",link:"https://raw.githubusercontent.com/Soteris24/genetrydash.github.io/refs/heads/main/nomenu/index.html"},
-         {title:"Better Gn Math",image:"https://avatars.githubusercontent.com/u/204602492?s=200&v=4",link:"https://raw.githubusercontent.com/L3br00n/Rubee/refs/heads/main/index.html"},
-         {title:"Bloons Td 5",image:"https://assets1.ignimgs.com/2017/05/05/bloons-td-5-1494021512734.jpg",
-          link:"https://raw.githubusercontent.com/Dwell888/BTD5html5/refs/heads/main/index.html"},...o,...l];
-function h(n=""){t.innerHTML="",e.innerHTML="";const o=c.filter((t=>t.title.toLowerCase().includes(n.toLowerCase()))).filter((t=>!s.includes(t.title)));a.textContent=o.length,o.forEach((n=>{const a=function(t){const e=document.createElement("div");e.className="game",e.style.width="100%";const n=document.createElement("img");n.src=t.image;const a=document.createElement("div");a.className="game-title",a.textContent=t.title;const i=document.createElement("button");return i.className="play-btn",i.textContent="Play",i.onclick=async()=>{const e=window.open("about:blank","_blank");if(!e)return alert("Allow popups!");e.document.write("Loading...");let n=t.link;t.isEthan&&!n.startsWith("http")&&(n=`https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/${n}`);try{const a=await fetch(n+"?t="+Date.now());if(!a.ok)throw new Error("File not found");let i=await a.text();if(t.isEthan){const e=t.link.split("/");e.pop();const n=`https://cdn.jsdelivr.net/gh/ethanytangcodes/art@main/${e.join("/")}`;i=i.replace(/src=["'](?!http)([^"']+)["']/gi,((t,e)=>`src="${n}/${e}"`)),i=i.replace(/href=["'](?!http)([^"']+)["']/gi,((t,e)=>`href="${n}/${e}"`)),/base/i.test(i)||(i=i.replace(/<head>/i,`<head><base href="${n}/">`))}e.document.open(),e.document.write(i),e.document.close()}catch(t){e.document.write("<h1>Failed to load file</h1><pre>"+t+"</pre>")}},e.appendChild(n),e.appendChild(a),e.appendChild(i),e}(n);i.includes(n.title)?e.appendChild(a):t.appendChild(a)}))}n.addEventListener("input",(()=>h(n.value))),h()})()</script>
 <div id=settings class=tabPage>
 <div class=settings>
 <div class=settingCard>
