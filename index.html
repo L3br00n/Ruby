@@ -15,142 +15,207 @@
 <div class=tab onclick='switchTab("settings",this)'><img src=https://img.icons8.com/m_rounded/200/FFFFFF/settings.png>Settings</div>
 <div class=tab onclick='switchTab("cloaking",this)'><img src=https://img.icons8.com/ios-filled/512/FFFFFF/ghost.png>Cloaking</div>
 </div>
-<div id="movies" class="tabPage">
-  <div class="page">
-    <h1>Movies + Shows</h1>
-    <input id="movieSearch" placeholder="Search sites..." style="margin-bottom:10px;">
+<div id=movies class=tabPage>
 
-    <div style="display:flex;gap:10px;margin:10px 0;flex-wrap:wrap">
-      <button id="randomMovieBtn">Random</button>
-      <button id="shuffleMovieBtn">Shuffle</button>
-      <select id="genreFilter" style="padding:8px;border-radius:6px;">
-        <option value="all">All Genres</option>
-        <option value="Media">Media</option>
-        <option value="Launchers">Launchers</option>
-        <option value="Streaming">Streaming</option>
-      </select>
-    </div>
+<div id=toolsHome class=page>
+<h1>Movies + Shows</h1>
 
-    <h2>Owner Favorites</h2>
-    <div id="movieOwnersFavorites" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
+<input id=movieSearch placeholder="Search sites..." style=margin-bottom:10px>
 
-    <h2>All Sites (<span id="movieCount">0</span>)</h2>
-    <div id="movieResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px"></div>
-  </div>
+<div style="display:flex;gap:10px;margin:10px 0;flex-wrap:wrap">
+<button id=randomMovieBtn>Random</button>
+<button id=shuffleMovieBtn>Shuffle</button>
 
-  <script>
-    (() => {
-      const movieResults = document.getElementById("movieResults");
-      const ownerFavs = document.getElementById("movieOwnersFavorites");
-      const searchInput = document.getElementById("movieSearch");
-      const movieCount = document.getElementById("movieCount");
-      const randomBtn = document.getElementById("randomMovieBtn");
-      const shuffleBtn = document.getElementById("shuffleMovieBtn");
-      const genreFilter = document.getElementById("genreFilter");
+<select id=genreFilter style=padding:8px;border-radius:6px>
+<option value=all>All Genres</option>
+<option value=Media>Media</option>
+<option value=Launchers>Launchers</option>
+<option value=Streaming>Streaming</option>
+</select>
+</div>
 
-      const ownerFavorites = [];
+<h2>Owner Favorites</h2>
+<div id=movieOwnersFavorites style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px"></div>
 
-      let sites = [
-        { title:"Google", mode:"embed", genre:"Media", url:"https://raw.githubusercontent.com/L3br00n/google/refs/heads/main/index.html", image:"https://www.google.com/s2/favicons?domain=google.com&sz=128" },
-        { title:"Kaito Vault", mode:"iframe", genre:"Streaming", url:"https://kaitovault.com", image:"https://www.google.com/s2/favicons?domain=kaitovault.com&sz=128" },
-        { title:"Ghost Link", mode:"embed", genre:"Launchers", url:"https://raw.githubusercontent.com/virtuan4-max/ghostlinkhub/refs/heads/main/ghostlinksinglefile.html", image:"https://www.google.com/s2/favicons?domain=https://college.uber.space&sz=128" },
-        { title:"GN_MATH", mode:"embed", genre:"Launchers", url:"https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html", image:"https://lh3.googleusercontent.com/jmtwn0fx0lrayGSZNJPriTkTYKCHe28qKVWHXkhuBGbGp-0qqnyChejfysufTVSjhJF1Tp5smoK6WfWpMHTnsXfYCv8=rw-w1400" },
-        { title:"GN_MATH", mode:"embed", genre:"Launchers", url:"https://raw.githubusercontent.com/L3br00n/upgrade/refs/heads/main/index.html", image:"https://upload.wikimedia.org/wikipedia/en/thumb/b/b6/Minecraft_2024_cover_art.png/250px-Minecraft_2024_cover_art.png" },
-{ title:"Hydra Network", mode:"iframe", genre:"Launchers", url:"https://birthdays.riaueventorganizer.com/", image:"https://www.google.com/s2/favicons?domain=https://kali.org&sz=128" },
-        { title:"Space", mode:"iframe", genre:"Launchers", url:"https://area.forwardersoft.com", image:"https://www.google.com/s2/favicons?domain=https://www.space.com&sz=128" },
-{ title:"idk", mode:"iframe", genre:"Launchers", url:"https://dr-gelaoshi.global.ssl.fastly.net", image:"https://www.google.com/s2/favicons?domain=https://dr-gelaoshi.global.ssl.fastly.net&sz=128" },
- { title:"UBG Hub", mode:"iframe", genre:"Media", url:"https://ubghub.org", image:"https://www.google.com/s2/favicons?domain=https://ubghub.org&sz=128" },
- { title:"Vortex", mode:"iframe", genre:"Launcher", url:"https://vtx.chat", image:"https://www.google.com/s2/favicons?domain=https://vtx.chat&sz=128" },
-      ];
+<h2>All Sites (<span id=movieCount>0</span>)</h2>
+<div id=movieResults style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px"></div>
+</div>
 
-      function openSite(site) {
-        const win = window.open("about:blank","_blank");
-        if(!win){ alert("Allow popups"); return; }
 
-        if(site.mode === "iframe") {
-          win.document.write(`
-            <html>
-            <head><title>${site.title}</title></head>
-            <body style="margin:0">
-              <iframe src="${site.url}" style="border:none;width:100vw;height:100vh;"></iframe>
-            </body>
-            </html>
-          `);
-        } else {
-          fetch(site.url)
-            .then(r => r.text())
-            .then(html => {
-              const now = new Date();
-              win.document.write(`
-                <html>
-                <head><title>${site.title}</title></head>
-                <body>
-                  ${html}
-                </body>
-                </html>
-              `);
-              win.document.close();
-            })
-            .catch(e => alert("Failed to load site: "+e));
-        }
-      }
+<div id=toolView style="display:none;width:100%;height:calc(100vh - 80px);flex-direction:column">
 
-      randomBtn.onclick = () => {
-        const filtered = getFilteredSites();
-        const s = filtered[Math.floor(Math.random() * filtered.length)];
-        if(s) openSite(s);
-      };
+<div style="padding:10px;border-bottom:1px solid var(--border)">
+<button onclick="exitTool()">Exit</button>
+</div>
 
-      shuffleBtn.onclick = () => {
-        sites.sort(() => Math.random() - 0.5);
-        render();
-      };
+<iframe id=toolFrame style="border:none;width:100%;height:100%"></iframe>
 
-      function getFilteredSites() {
-        const q = searchInput.value.toLowerCase();
-        const genre = genreFilter.value;
-        return sites.filter(s => 
-          s.title.toLowerCase().includes(q) && (genre === "all" || s.genre === genre)
-        );
-      }
+</div>
 
-      function render() {
-        const list = getFilteredSites();
-        movieResults.innerHTML = "";
-        ownerFavs.innerHTML = "";
-        movieCount.textContent = list.length;
 
-        list.forEach(site => {
-          const card = document.createElement("div");
-          card.className = "game";
+<script>
+(()=>{
 
-          const img = document.createElement("img");
-          img.src = site.image;
+const e=document.getElementById("movieResults"),
+t=document.getElementById("movieOwnersFavorites"),
+n=document.getElementById("movieSearch"),
+o=document.getElementById("movieCount"),
+a=document.getElementById("randomMovieBtn"),
+i=document.getElementById("shuffleMovieBtn"),
+m=document.getElementById("genreFilter")
 
-          const title = document.createElement("div");
-          title.className = "game-title";
-          title.textContent = `${site.title} (${site.genre})`;
+const toolsHome=document.getElementById("toolsHome")
+const toolView=document.getElementById("toolView")
+const toolFrame=document.getElementById("toolFrame")
 
-          const btn = document.createElement("button");
-          btn.className = "play-btn";
-          btn.textContent = site.mode === "iframe" ? "Open (iframe)" : "Open (embed)";
-          btn.onclick = () => openSite(site);
+const l=[]
 
-          card.append(img, title, btn);
+let s=[
 
-          if(ownerFavorites.includes(site.title)){
-            ownerFavs.appendChild(card);
-          } else {
-            movieResults.appendChild(card);
-          }
-        });
-      }
+{title:"Google",mode:"embed",genre:"Media",url:"https://raw.githubusercontent.com/L3br00n/google/refs/heads/main/index.html",image:"https://www.google.com/s2/favicons?domain=google.com&sz=128"},
 
-      searchInput.oninput = render;
-      genreFilter.onchange = render;
-      render();
-    })();
-  </script>
+{title:"Kaito Vault",mode:"iframe",genre:"Streaming",url:"https://kaitovault.com",image:"https://www.google.com/s2/favicons?domain=kaitovault.com&sz=128"},
+
+{title:"Ghost Link",mode:"embed",genre:"Launchers",url:"https://raw.githubusercontent.com/virtuan4-max/ghostlinkhub/refs/heads/main/ghostlinksinglefile.html",image:"https://www.google.com/s2/favicons?domain=https://college.uber.space&sz=128"},
+
+{title:"GN_MATH",mode:"embed",genre:"Launchers",url:"https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/autoupdate.html",image:"https://lh3.googleusercontent.com/jmtwn0fx0lrayGSZNJPriTkTYKCHe28qKVWHXkhuBGbGp-0qqnyChejfysufTVSjhJF1Tp5smoK6WfWpMHTnsXfYCv8=rw-w1400"},
+
+{title:"GN_MATH",mode:"embed",genre:"Launchers",url:"https://raw.githubusercontent.com/L3br00n/upgrade/refs/heads/main/index.html",image:"https://upload.wikimedia.org/wikipedia/en/thumb/b/b6/Minecraft_2024_cover_art.png/250px-Minecraft_2024_cover_art.png"},
+
+{title:"Hydra Network",mode:"iframe",genre:"Launchers",url:"https://birthdays.riaueventorganizer.com/",image:"https://www.google.com/s2/favicons?domain=https://kali.org&sz=128"},
+
+{title:"Space",mode:"iframe",genre:"Launchers",url:"https://area.forwardersoft.com",image:"https://www.google.com/s2/favicons?domain=https://www.space.com&sz=128"},
+
+{title:"UniUB V4",mode:"iframe",genre:"Launchers",url:"https://dr-gelaoshi.global.ssl.fastly.net",image:"https://www.google.com/s2/favicons?domain=https://dr-gelaoshi.global.ssl.fastly.net&sz=128"},
+
+{title:"UBG Hub",mode:"iframe",genre:"Media",url:"https://ubghub.org",image:"https://www.google.com/s2/favicons?domain=https://ubghub.org&sz=128"},
+
+{title:"Vortex",mode:"iframe",genre:"Launcher",url:"https://vtx.chat",image:"https://www.google.com/s2/favicons?domain=https://vtx.chat&sz=128"}
+
+]
+
+
+function openSite(site){
+
+if(site.title==="GN_MATH"){
+
+toolsHome.style.display="none"
+toolView.style.display="flex"
+
+fetch(site.url+"?t="+Date.now())
+.then(r=>r.text())
+.then(html=>{
+const blob=new Blob([html],{type:"text/html"})
+toolFrame.src=URL.createObjectURL(blob)
+})
+
+return
+}
+
+const w=window.open("about:blank","_blank")
+
+if(!w){alert("Allow popups");return}
+
+if(site.mode==="iframe"){
+
+w.document.write(`
+<html>
+<head><title>${site.title}</title></head>
+<body style="margin:0">
+<iframe src="${site.url}" style="border:none;width:100vw;height:100vh;"></iframe>
+</body>
+</html>
+`)
+
+}else{
+
+fetch(site.url+"?t="+Date.now())
+.then(r=>r.text())
+.then(html=>{
+w.document.write(`
+<html>
+<head><title>${site.title}</title></head>
+<body>
+${html}
+</body>
+</html>
+`)
+w.document.close()
+})
+
+}
+
+}
+
+
+window.exitTool=function(){
+toolView.style.display="none"
+toolsHome.style.display="block"
+toolFrame.src=""
+}
+
+
+function filter(){
+const q=n.value.toLowerCase()
+const g=m.value
+return s.filter(x=>x.title.toLowerCase().includes(q)&&
+(g==="all"||x.genre===g))
+}
+
+
+function render(){
+
+const list=filter()
+
+e.innerHTML=""
+t.innerHTML=""
+o.textContent=list.length
+
+list.forEach(site=>{
+
+const card=document.createElement("div")
+card.className="game"
+
+const img=document.createElement("img")
+img.src=site.image
+
+const title=document.createElement("div")
+title.className="game-title"
+title.textContent=`${site.title} (${site.genre})`
+
+const btn=document.createElement("button")
+btn.className="play-btn"
+btn.textContent="Open"
+btn.onclick=()=>openSite(site)
+
+card.append(img,title,btn)
+
+l.includes(site.title)?t.appendChild(card):e.appendChild(card)
+
+})
+
+}
+
+
+a.onclick=()=>{
+const list=filter()
+const r=list[Math.floor(Math.random()*list.length)]
+if(r)openSite(r)
+}
+
+i.onclick=()=>{
+s.sort(()=>Math.random()-.5)
+render()
+}
+
+n.oninput=render
+m.onchange=render
+
+render()
+
+})()
+</script>
+
 </div>
 <div id=cloaking class=tabPage>
 <div class=header>
